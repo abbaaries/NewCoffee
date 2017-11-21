@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">栗子咖啡</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="houli">后里</string>
+    <string name="fengyuan">豐原</string>
+
+
+    <string name="warning_info">咖啡最佳賞味期為30分鐘</string>
+
+    <string name="order_info">訂購須知 : 請務必當時段來領取</string>
+
+
+    <string name="black">美式咖啡</string>
+    <string name="signboard">招牌咖啡</string>
+    <string name="chestnut_late">栗子拿鐵</string>
+    <string name="latte">招牌拿鐵</string>
+    <string name="mocha">摩卡咖啡</string>
+    <string name="cappuccino">焦糖瑪奇朵</string>
+
+</resources>

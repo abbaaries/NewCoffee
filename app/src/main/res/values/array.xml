@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="choseTown">
+        <item>--------  請選擇鄉鎮  --------</item>
+    </array>
+    <array name="choseRoad">
+        <item>--------  請選擇道路  --------</item>
+    </array>
+
+
+    <array name="city_name_array">
+        <item>--------  請選擇縣市  --------</item>
+        <item>台中市</item>
+
+    </array>
+
+    <array name="town_name_array">
+        <item>--------  請選擇鄉鎮  --------</item>
+        <item >后里區</item>
+        <item>豐原區</item>
+    </array>
+
+    <array name="houli_road_name_array">
+        <item>--------  請選擇道路  --------</item>
+        <item>月湖路</item>
+        <item>中山路</item>
+        <item>大圳路</item>
+    </array>
+
+    <array name="fengyuan_road_name_array">
+        <item>--------  請選擇道路  --------</item>
+        <item>中山路</item>
+        <item>豐勢路</item>
+        <item>豐原大道</item>
+    </array>
+
+    <array name="meal_list">
+        <item>美式咖啡</item>
+        <item>招牌咖啡</item>
+        <item>栗子拿鐵</item>
+        <item>招牌拿鐵</item>
+        <item>摩卡咖啡</item>
+        <item>焦糖瑪奇朵</item>
+    </array>
+    <array name="hot_cold">
+        <item>熱</item>
+        <item>冷</item>
+    </array>
+    <array name="meal_size">
+        <item>大杯</item>
+        <item>中杯</item>
+    </array>
+    <array name="meal_suger">
+        <item>無糖</item>
+        <item>少糖</item>
+        <item>正常</item>
+    </array>
+    <array name="chose_hot">
+        <item>-</item>
+    </array>
+    <array name="chose_clod">
+        <item>正常</item>
+        <item>少冰</item>
+        <item>去冰</item>
+    </array>
+    <array name="coffee_middle_price">
+        <item>45元</item>
+        <item>50元</item>
+        <item>55元</item>
+        <item>50元</item>
+        <item>55元</item>
+        <item>60元</item>
+    </array>
+    <array name="coffee_big_price">
+        <item>50元</item>
+        <item>55元</item>
+        <item>60元</item>
+        <item>55元</item>
+        <item>60元</item>
+        <item>65元</item>
+    </array>
+</resources>
