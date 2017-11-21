@@ -34,14 +34,6 @@
         <item>豐原大道</item>
     </array>
 
-    <array name="meal_list">
-        <item>美式咖啡</item>
-        <item>招牌咖啡</item>
-        <item>栗子拿鐵</item>
-        <item>招牌拿鐵</item>
-        <item>摩卡咖啡</item>
-        <item>焦糖瑪奇朵</item>
-    </array>
     <array name="hot_cold">
         <item>熱</item>
         <item>冷</item>
@@ -64,19 +56,66 @@
         <item>去冰</item>
     </array>
     <array name="coffee_middle_price">
+        <item>50元</item>
+        <item>55元</item>
         <item>45元</item>
-        <item>50元</item>
-        <item>55元</item>
-        <item>50元</item>
-        <item>55元</item>
+        <item>65元</item>
+        <item>65元</item>
+        <item>49元</item>
         <item>60元</item>
     </array>
-    <array name="coffee_big_price">
-        <item>50元</item>
-        <item>55元</item>
-        <item>60元</item>
-        <item>55元</item>
-        <item>60元</item>
+    <array name="coffee_big_ice_price">
         <item>65元</item>
+        <item>70元</item>
+        <item>65元</item>
+        <item>95元</item>
+        <item>85元</item>
+        <item>69元</item>
+        <item>75元</item>
+    </array>
+    <array name="coffee_big_hot_price">
+        <item>65元</item>
+        <item>70元</item>
+        <item>50元</item>
+        <item>85元</item>
+        <item>85元</item>
+        <item>69元</item>
+        <item>75元</item>
+    </array>
+    <array name="coffee_list">
+        <item>招牌拿鐵</item>
+        <item>栗子拿鐵</item>
+        <item>美式咖啡</item>
+        <item>摩卡咖啡</item>
+        <item>焦糖瑪奇朵</item>
+        <item>簡單美好</item>
+        <item>卡布奇諾</item>
+    </array>
+    <array name="coffee_middle">
+        <item>12oz</item>
+        <item>12oz</item>
+        <item>12oz</item>
+        <item>12oz</item>
+        <item>12oz</item>
+        <item>12oz</item>
+        <item>12oz</item>
+    </array>
+    <array name="coffee_big_ice">
+        <item>16oz</item>
+        <item>16oz</item>
+        <item>20oz</item>
+        <item>20oz</item>
+        <item>16oz</item>
+        <item>20oz</item>
+        <item>16oz</item>
+    </array>
+    <array name="coffee_big_hot">
+        <item>16oz</item>
+        <item>16oz</item>
+        <item>16oz</item>
+        <item>16oz</item>
+        <item>16oz</item>
+        <item>20oz</item>
+        <item>16oz</item>
     </array>
 </resources>

@@ -23,11 +23,12 @@ public class MealList extends AppCompatActivity {
     GridView grid ;
     String[] fun = {"招牌拿鐵","栗子拿鐵","招牌咖啡","美式咖啡","摩卡咖啡","焦糖瑪奇朵"};
     int[] icons = {R.drawable.coffee1, R.drawable.coffee2, R.drawable.coffee3,
-            R.drawable.coffee4, R.drawable.coffee5, R.drawable.coffee6};
+            R.drawable.coffee4, R.drawable.coffee5, R.drawable.coffee6,R.drawable.home};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meal_list);
+
         grid = (GridView)findViewById(R.id.grid_view_list);
         grid.setAdapter(new ImageAdapter(this));
         setListener();
@@ -86,7 +87,7 @@ public class MealList extends AppCompatActivity {
             Toast.makeText(MealList.this,parent.getItemAtPosition(position).toString(),Toast.LENGTH_SHORT).show();
             Intent it = new Intent();
             it.setClass(MealList.this,CoffeeMenu.class);
-            it.putExtra("Type",position);
+            it.putExtra("type",position);
             isSendOut=getIntent().getBooleanExtra("isSendOut",false);
             it.putExtra("isSendOut",isSendOut);
             startActivity(it);
