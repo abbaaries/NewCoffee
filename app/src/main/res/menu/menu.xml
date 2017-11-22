@@ -7,14 +7,14 @@
         android:title=""
         app:showAsAction="always" />
 
-    <!--<menu>-->
+
         <item
             android:id="@+id/home"
             android:icon="@drawable/home"
             android:title=""
             app:showAsAction="always" />
 
-    <!--</menu>-->
+
 
 
 
