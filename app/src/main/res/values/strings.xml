@@ -13,6 +13,11 @@
 
     <string name="order_info">訂購須知 : 請務必當時段來領取</string>
 
+    <string name="midsize">中杯 : 12 oz</string>
+    <string name="hotbigsize">大杯(熱) : 16 oz</string>
+    <string name="hotbigsize2">大杯(熱) : 20 oz</string>
+    <string name="icebigSize">大杯(冰) : 16 oz</string>
+    <string name="icebigSize2">大杯(冰) : 20 oz</string>
 
     <string name="black">美式咖啡</string>
     <string name="signboard">招牌咖啡</string>

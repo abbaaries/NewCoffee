@@ -34,15 +34,19 @@
         <item>豐原大道</item>
     </array>
 
-    <array name="hot_cold">
+    <array name="hot_cold_size">
         <item>熱</item>
         <item>冷</item>
     </array>
-    <array name="meal_size">
-        <item>大杯</item>
-        <item>中杯</item>
+    <array name="size1">
+        <item>中杯 </item>
+        <item>大杯 </item>
     </array>
-    <array name="meal_suger">
+    <array name="size2">
+        <item>中杯 </item>
+        <item>大杯 </item>
+    </array>
+    <array name="meal_sugar">
         <item>無糖</item>
         <item>少糖</item>
         <item>正常</item>
@@ -50,11 +54,7 @@
     <array name="chose_hot">
         <item>-</item>
     </array>
-    <array name="chose_clod">
-        <item>正常</item>
-        <item>少冰</item>
-        <item>去冰</item>
-    </array>
+
     <array name="coffee_middle_price">
         <item>50元</item>
         <item>55元</item>
