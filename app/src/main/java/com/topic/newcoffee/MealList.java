@@ -28,7 +28,7 @@ import java.util.zip.Inflater;
 public class MealList extends AppCompatActivity {
 
     GridView grid ;
-    ArrayList<Map<String,Object>> mylist,billlist;
+    public static ArrayList<Map<String,Object>> mylist,billlist;
     SimpleAdapter simpleAdapter;
     String[] fun;
     Intent it;
