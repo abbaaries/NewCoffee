@@ -22,11 +22,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".MealList" />
-        <activity android:name=".CoffeeMenu"></activity>
+        <activity android:name=".CoffeeMenu" />
         <activity
             android:name=".Register"
-            android:label="註冊"></activity>
-        <activity android:name=".BillList"></activity>
+            android:label="註冊" />
+        <activity android:name=".BillList" />
+        <activity android:name=".ChangeMeals"></activity>
     </application>
 
 </manifest>

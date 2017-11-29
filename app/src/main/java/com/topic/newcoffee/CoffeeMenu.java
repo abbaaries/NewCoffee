@@ -26,19 +26,22 @@ import android.widget.Toast;
 public class CoffeeMenu extends AppCompatActivity {
     String[] values1,values2,values3;
     NumberPicker np1,np2,np3;
+    ImageView imgCoffee;
     TextView tvName,tv1,tv2,tv3,tvPrice,tvNum;
     Button btnReduce,btnAdd,btnPlus;
     int count=1,kind=0,newVal1=0,newVal2,newVal3=0,values;
     String unit="0",type,size,sugar;
-    public static SharedPreferences.Editor editor;
+    int[] img;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coffee_menu);
         SharedPreferences pref = getSharedPreferences("bill",MODE_PRIVATE);
-        editor = pref.edit();
+
         findView();
-        kind = getIntent().getIntExtra("kind",0);
+        kind = MealList.kind;
+        img = MealList.img;
         setText();
         picker();
         btClickListener();
@@ -50,6 +53,7 @@ public class CoffeeMenu extends AppCompatActivity {
         tv2 = (TextView)findViewById(R.id.textView2);
         tv3 = (TextView)findViewById(R.id.textView3);
         tvPrice = (TextView)findViewById(R.id.tv_totalPrice);
+        imgCoffee = (ImageView)findViewById(R.id.img_coffee);
 
         np1 = (NumberPicker)findViewById(R.id.numberPicker1);
         np2 = (NumberPicker)findViewById(R.id.numberPicker2);
@@ -60,6 +64,7 @@ public class CoffeeMenu extends AppCompatActivity {
         tvNum = (TextView)findViewById(R.id.tv_number);
     }
     void setText(){
+        imgCoffee.setImageResource(img[kind]);
         tv1.setText(R.string.midsize);
         tv2.setText(R.string.hotbigsize);
         tv3.setText(R.string.icebigSize);
@@ -98,7 +103,7 @@ public class CoffeeMenu extends AppCompatActivity {
         np1.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                int kind = getIntent().getIntExtra("kind",0);
+//                int kind = getIntent().getIntExtra("kind",0);
                 newVal1=newVal;
                 if( 1==newVal2 && 0==newVal1 )
                     unit = getResources().getStringArray(R.array.coffee_big_hot_price)[kind];
@@ -116,7 +121,7 @@ public class CoffeeMenu extends AppCompatActivity {
         np2.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                int kind = getIntent().getIntExtra("kind", 0);
+//                int kind = getIntent().getIntExtra("kind", 0);
                 newVal2=newVal;
                 if(newVal1 == 0 && newVal2 == 1 )
                     unit = getResources().getStringArray(R.array.coffee_big_hot_price)[kind];

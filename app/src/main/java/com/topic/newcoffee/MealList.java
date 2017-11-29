@@ -31,16 +31,19 @@ public class MealList extends AppCompatActivity {
     public static ArrayList<Map<String,Object>> mylist,billlist;
     SimpleAdapter simpleAdapter;
     String[] fun;
+    public static int[] img;
     Intent it;
     HashMap<String,Object> m1,m2,m3,m4,m5,m6,m7;
     public static int kind,amount0,amount1,amount2,amount3,amount4,amount5,amount6,pr0,pr1,pr2,pr3,pr4,pr5,pr6,num,money;
+    int pr[];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        pr = new int[6];
         mylist = new ArrayList<>();
         setContentView(R.layout.activity_meal_list);
-        simpleAdapter = new SimpleAdapter(this,mylist,R.layout.myitem,
-                new String[]{"name","total","img"}, new int[]{R.id.tv_name,R.id.tv_total,R.id.img_coffee});
+        simpleAdapter = new SimpleAdapter(this,mylist,R.layout.myitem, new String[]{"name","total","img"}
+                , new int[]{R.id.tv_name,R.id.tv_total,R.id.img_coffee});
         m1 = new HashMap<>();
         m2 = new HashMap<>();
         m3 = new HashMap<>();
@@ -49,32 +52,34 @@ public class MealList extends AppCompatActivity {
         m6 = new HashMap<>();
         m7 = new HashMap<>();
         it = new Intent();
+        fun = getResources().getStringArray(R.array.coffee_list);
+        img = new int[]{R.drawable.coffee1,R.drawable.coffee2,R.drawable.coffee3,R.drawable.coffee4,R.drawable.coffee5,R.drawable.coffee6,R.drawable.coffee7};
         Log.d("test","onCreate");
     }
     void setGrid() {
-        fun = getResources().getStringArray(R.array.coffee_list);
+
         mylist.clear();
         m1.put("name", fun[0]);
         m1.put("total", "x" + amount0);
-        m1.put("img", R.drawable.coffee1);
+        m1.put("img", img[0]);
         m2.put("name", fun[1]);
         m2.put("total", "x" + amount1);
-        m2.put("img", R.drawable.coffee2);
+        m2.put("img", img[1]);
         m3.put("name", fun[2]);
         m3.put("total", "x" + amount2);
-        m3.put("img", R.drawable.coffee3);
+        m3.put("img", img[2]);
         m4.put("name", fun[3]);
         m4.put("total", "x" + amount3);
-        m4.put("img", R.drawable.coffee4);
+        m4.put("img", img[3]);
         m5.put("name", fun[4]);
         m5.put("total", "x" + amount4);
-        m5.put("img", R.drawable.coffee5);
+        m5.put("img", img[4]);
         m6.put("name", fun[5]);
         m6.put("total", "x" + amount5);
-        m6.put("img", R.drawable.coffee6);
+        m6.put("img", img[5]);
         m7.put("name", fun[6]);
         m7.put("total", "x" + amount6);
-        m7.put("img", R.drawable.coffee7);
+        m7.put("img", img[6]);
         mylist.add(m1);
         mylist.add(m2);
         mylist.add(m3);
@@ -91,8 +96,9 @@ public class MealList extends AppCompatActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             kind = position;
-            it.setClass(MealList.this,CoffeeMenu.class);
-            it.putExtra("kind",kind);
+//            if((kind==0&&amount0!=0)||(kind==1&&amount1!=0)||(kind==2&&amount2!=0)||(kind==3&&amount3!=0)||(kind==4&&amount4!=0)||(kind==5&&amount5!=0)||(kind==6&&amount6!=0))it.setClass(MealList.this,ChangeMeals.class);
+//            else
+                it.setClass(MealList.this,CoffeeMenu.class);
             Log.d("test11","kind="+kind);
             startActivity(it);
         }
@@ -160,7 +166,7 @@ public class MealList extends AppCompatActivity {
                     Toast.makeText(MealList.this,"請選擇欲購買的咖啡",Toast.LENGTH_SHORT).show();
 
                 }else {
-                    it.setClass(this, BillList.class);
+                    it.setClass(this, ChangeMeals.class);
                     startActivity(it);
                 }
                 break;
