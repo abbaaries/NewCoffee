@@ -28,9 +28,11 @@ import java.util.zip.Inflater;
 public class MealList extends AppCompatActivity {
 
     GridView grid ;
-    public static ArrayList<Map<String,Object>> mylist,billlist;
+    public static ArrayList<Map<String,Object>> mylist;
+    public static ArrayList<Map<String,String>> billList;
     SimpleAdapter simpleAdapter;
     String[] fun;
+
     public static int[] img;
     Intent it;
     HashMap<String,Object> m1,m2,m3,m4,m5,m6,m7;
@@ -52,7 +54,7 @@ public class MealList extends AppCompatActivity {
         m6 = new HashMap<>();
         m7 = new HashMap<>();
         it = new Intent();
-        fun = getResources().getStringArray(R.array.coffee_list);
+        fun= getResources().getStringArray(R.array.coffee_list);
         img = new int[]{R.drawable.coffee1,R.drawable.coffee2,R.drawable.coffee3,R.drawable.coffee4,R.drawable.coffee5,R.drawable.coffee6,R.drawable.coffee7};
         Log.d("test","onCreate");
     }
@@ -114,6 +116,8 @@ public class MealList extends AppCompatActivity {
                 amount0+=num;
                 pr0+=money;
                 Log.d("test12","amount0="+pr0);
+
+
                 break;
             case 1:
                 amount1+=num;
