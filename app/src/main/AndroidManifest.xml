@@ -3,8 +3,9 @@
     package="com.topic.newcoffee">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_SMS"/>
-    <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,24 +16,29 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".MealList" android:label="咖啡清單"/>
-        <activity android:name=".CoffeeMenu" android:label="選擇" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Register" android:label="註冊" >
+            android:name=".MealList"
+            android:label="咖啡清單" />
+        <activity
+            android:name=".CoffeeMenu"
+            android:label="選擇" />
+        <activity
+            android:name=".Register"
+            android:label="註冊">
+
+        </activity>
+        <activity android:name=".memberList"></activity>
+        <activity android:name=".ChangeMeals" />
+        <activity
+            android:name=".LoginActivity"
+            android:label="登入"></activity>
+        <activity android:name=".SendInfo" android:label="送出清單">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <activity android:name=".memberList">
-
-        </activity>
-        <activity android:name=".ChangeMeals" />
-        <activity android:name=".LoginActivity" android:label="登入">
-
         </activity>
     </application>
 
