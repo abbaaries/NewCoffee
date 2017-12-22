@@ -51,13 +51,6 @@ public class CoffeeMenu extends AppCompatActivity {
         if (mDbHelper==null)
         mDbHelper= new DB(this).open();
     }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-    }
-
     void findView(){
         tvName = (TextView)findViewById(R.id.tv_coffeeName1);
         tv1 = (TextView)findViewById(R.id.tView1);
@@ -88,10 +81,6 @@ public class CoffeeMenu extends AppCompatActivity {
             bigHot[i]="大杯(熱) : "+sp.getString("bigHot"+i,"");
             bigIce[i]="大杯(冰) : "+sp.getString("bigIce"+i,"");
         }
-//        name = getResources().getStringArray(R.array.coffee_list);
-//        middle = getResources().getStringArray(R.array.coffee_middle);
-//        bigHot = getResources().getStringArray(R.array.coffee_big_hot);
-//        bigIce = getResources().getStringArray(R.array.coffee_big_ice);
         if(isUpdate){
             updateSetText();
         }else {
@@ -118,17 +107,14 @@ public class CoffeeMenu extends AppCompatActivity {
         String s;
         if (type.equals("熱")&&size.equals("大杯")){
             s = sp.getString("bigHotPr"+kind,"")+"元";
-//            s = getResources().getStringArray(R.array.coffee_big_hot_price)[kind];
             Log.d(TAG,"s1:"+s);
             unit = s.substring(0,s.length()-1);
         }else if(type.equals("冷")&&size.equals("大杯")){
             s = sp.getString("bigIcePr"+kind,"")+"元";
-//            s = getResources().getStringArray(R.array.coffee_big_ice_price)[kind];
             Log.d(TAG,"s2:"+s);
             unit = s.substring(0,s.length()-1);
         }else {
             s = sp.getString("middlePr"+kind,"")+"元";
-//            s = getResources().getStringArray(R.array.coffee_middle_price)[kind];
             Log.d(TAG,"s3:"+s);
             unit =s.substring(0,s.length()-1);
         }
@@ -148,20 +134,6 @@ public class CoffeeMenu extends AppCompatActivity {
         namePicker();
         item=LastMeals.item;
         Log.d(TAG,"item:"+item);
-
-//        long cRowId = mDbHelper.getrowId(item);
-//        int cKind = mDbHelper.getKind(item);
-//        cType = mDbHelper.getType(item);
-//        cSize = mDbHelper.getSize(item);
-//        cSugar = mDbHelper.getSugar(item);
-//        cAmount = mDbHelper.getAmount(item);
-//        cUnit = mDbHelper.getUnit(item)+"";
-//        tvName.setText(mDbHelper.getName(item));
-//        np1.setValue(type.equals("熱")?0:1);
-//        np2.setValue(size.equals("中杯")?0:1);
-//        np3.setValue(mDbHelper.getSugar(item).equals("無糖")?0:mDbHelper.getSugar(item).equals("少糖")?1:2);
-//        tvNum.setText(amount+"");
-//        tvPrice.setText(mDbHelper.getSum(item)+"元");
         rowId = LastMeals.cRowId;
         kind = LastMeals.cKind;
         type = LastMeals.cType;
@@ -177,7 +149,6 @@ public class CoffeeMenu extends AppCompatActivity {
         tvPrice.setText(sum+"元");
     }
     void namePicker(){
-
         nameNp.setMaxValue(0);
         nameNp.setMaxValue(name.length-1);
         nameNp.setDisplayedValues(name);

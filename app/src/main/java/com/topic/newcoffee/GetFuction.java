@@ -1,6 +1,7 @@
 package com.topic.newcoffee;
 
 
+import android.content.SharedPreferences;
 import android.nfc.Tag;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -58,7 +59,7 @@ public class GetFuction extends AppCompatActivity {
         int2[2] = m>50?5:m>40?4:m>30?3:m>20?2:m>10?1:0;
         return int2;
     }
-
+    SharedPreferences sp;
 
     public int[] countTime(int tYear, int tMomth ,int tDay,int tAMPM, int tHour){
         if(tAMPM==1){
@@ -170,4 +171,5 @@ public class GetFuction extends AppCompatActivity {
         Log.d(TAG,"tyear:"+year+",tmonth:"+month+",tday:"+day+",week:"+dayofWeek);
         return dayofWeek;
     }
+
 }

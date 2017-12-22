@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity
     DatabaseReference userRef;
     SharedPreferences sp;
     boolean isUpdate=false;
-    int number,number2;
+    int number,number2,number3,number4,number5;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,8 +115,20 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        isOpenF();
-        getData();
+        Runnable r1 = new Runnable() {
+            @Override
+            public void run() {
+                isOpenF();
+                getData();
+            }
+        };
+        Thread t1 = new Thread(r1);
+        t1.start();
+        try {
+            t1.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
     public void isOpenF(){
         userRef = db.getReference();
@@ -141,59 +153,30 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 number=0;
-//                isOpen = dataSnapshot.child("營業").getValue().toString().equals("true")?true:false;
+//                if ((sp.getString("咖啡種類個數","").equals("")) ||isUpdate){
+                //////抓取firebase 咖啡種類 資料
                 for(DataSnapshot db : dataSnapshot.getChildren()){
                     sp.edit().putString("coffee"+number,db.child("name").getValue().toString()).commit();
                     sp.edit().putString("middle"+number,db.child("中杯").getValue().toString()).commit();
-                    sp.edit().putString("bigIce"+number,db.child("大杯(冰)").getValue().toString()).commit();
-                    sp.edit().putString("bigHot"+number,db.child("大杯(熱)").getValue().toString()).commit();
                     sp.edit().putString("middlePr"+number,db.child("中杯價").getValue().toString()).commit();
+                    sp.edit().putString("bigIce"+number,db.child("大杯(冰)").getValue().toString()).commit();
                     sp.edit().putString("bigIcePr"+number,db.child("大杯(冰)價").getValue().toString()).commit();
-                    sp.edit().putString("bigHotPr"+number,db.child("大杯(熱)價").getValue().toString()).commit();
+                    sp.edit().putString("bigHot"+number,db.child("大杯(熱)").getValue().toString()).commit();
                     sp.edit().putString("bigHotPr"+number,db.child("大杯(熱)價").getValue().toString()).commit();
                     sp.edit().putString("store"+number,db.child("存貨").getValue().toString()).commit();
                     Log.d(TAG,"number:"+number);
-                    Log.d(TAG,"name:"+db.child("name").getValue().toString());
-                    Log.d(TAG,"中杯:"+db.child("中杯").getValue().toString());
-                    Log.d(TAG,"中杯價:"+db.child("中杯價").getValue().toString());
-                    Log.d(TAG,"大杯(冰):"+db.child("大杯(冰)").getValue().toString());
-                    Log.d(TAG,"大杯(冰)價:"+db.child("大杯(冰)價").getValue().toString());
-                    Log.d(TAG,"大杯(熱)"+db.child("大杯(熱)").getValue().toString());
-                    Log.d(TAG,"大杯(熱)價:"+db.child("大杯(熱)價").getValue().toString());
-                    Log.d(TAG,"存貨:"+db.child("存貨").getValue().toString());
+//                    Log.d(TAG,"name:"+db.child("name").getValue().toString());
+//                    Log.d(TAG,"中杯:"+db.child("中杯").getValue().toString());
+//                    Log.d(TAG,"中杯價:"+db.child("中杯價").getValue().toString());
+//                    Log.d(TAG,"大杯(冰):"+db.child("大杯(冰)").getValue().toString());
+//                    Log.d(TAG,"大杯(冰)價:"+db.child("大杯(冰)價").getValue().toString());
+//                    Log.d(TAG,"大杯(熱)"+db.child("大杯(熱)").getValue().toString());
+//                    Log.d(TAG,"大杯(熱)價:"+db.child("大杯(熱)價").getValue().toString());
+//                    Log.d(TAG,"存貨:"+db.child("存貨").getValue().toString());
                     number++;
                 }
-//                Log.d(TAG,"dataSnapshot:"+dataSnapshot.getValue().toString());
-//                if(dataSnapshot.child("users").hasChildren()){
-//                    if (!userPhone.equals("")){
-//                        for (int i=1;i<=dataSnapshot.child("users").getChildrenCount();i++){
-//                            if(dataSnapshot.child("users").child(i+"").child("phone").getValue().toString().equals(userPhone)){
-//                                j=i;
-//                                isUpdate = dataSnapshot.child("users").child(j+"").child("isUpdate").getValue().toString().equals("true")?true:false;
-//                            }else {
-//                                isUpdate = false;
-//                            }
-//                        }
-//
-//                    }
-//                }
-//
-//                Log.d(TAG,"ss14:"+sp.getString("咖啡種類個數","").equals("")+"/"+sp.getString("咖啡種類個數","")+"/"+isUpdate);
-//
-//                if ((sp.getString("咖啡種類個數","").equals("")) ||isUpdate){
-////                    取得firebase咖啡資料
-//                    for (int i=0;i<dataSnapshot.child("coffee").getChildrenCount();i++){
-//                        sp.edit().putString("coffee"+i,dataSnapshot.child("coffee").child((i+1)+"").child("name").getValue().toString()).commit();
-//                        sp.edit().putString("middle"+i,dataSnapshot.child("coffee").child((i+1)+"").child("中杯").getValue().toString()).commit();
-//                        sp.edit().putString("bigIce"+i,dataSnapshot.child("coffee").child((i+1)+"").child("大杯(冰)").getValue().toString()).commit();
-//                        sp.edit().putString("bigHot"+i,dataSnapshot.child("coffee").child((i+1)+"").child("大杯(熱)").getValue().toString()).commit();
-//                        sp.edit().putString("middlePr"+i,dataSnapshot.child("coffee").child((i+1)+"").child("中杯價").getValue().toString()).commit();
-//                        sp.edit().putString("bigIcePr"+i,dataSnapshot.child("coffee").child((i+1)+"").child("大杯(冰)價").getValue().toString()).commit();
-//                        sp.edit().putString("bigHotPr"+i,dataSnapshot.child("coffee").child((i+1)+"").child("大杯(熱)價").getValue().toString()).commit();
-//
-//                        Log.d(TAG,"ss14:"+dataSnapshot.child("coffee").child((i+1)+"").child("存貨").getValue().toString());
-//                    }
-//                    sp.edit().putString("咖啡種類個數",dataSnapshot.child("營業時間").getChildrenCount()+"").commit();
+                    sp.edit().putString("咖啡種類個數",dataSnapshot.getChildrenCount()+"").commit();
+                    Log.d(TAG,"咖啡個數:"+dataSnapshot.getChildrenCount());
 //                }
             }
 
@@ -202,21 +185,43 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
-
+        // 抓 firebase 店址資料
         userRef = db.getReference("店址");
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 number2=0;
                 for (DataSnapshot db1 : dataSnapshot.getChildren()){
-                    number2++;
-                    sp.edit().putString("店數",number2+"").commit();
-                    sp.edit().putString(number2+"town",db1.child("town").getValue().toString()).commit();
-                    sp.edit().putString(number2+"店址",db1.child("住址").getValue().toString()).commit();
-                    Log.d(TAG,"number2:"+number2);
+                    sp.edit().putString("town"+number2,db1.child("town").getValue().toString()).commit();
+                    sp.edit().putString("店址"+number2,db1.child("住址").getValue().toString()).commit();
                     Log.d(TAG,"town:"+db1.child("town").getValue().toString());
                     Log.d(TAG,"住址:"+db1.child("住址").getValue().toString());
+                    number2++;
+                }
+                sp.edit().putString("店數",dataSnapshot.getChildrenCount()+"").commit();
+                Log.d(TAG,"店數:"+dataSnapshot.getChildrenCount()+"");
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        //抓firebase營業時間
+        userRef = db.getReference("營業時間");
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                number3=0;
+                Log.d(TAG,"營業時間:"+dataSnapshot.getChildrenCount());
+                for (DataSnapshot db2 : dataSnapshot.getChildren()){
+                    sp.edit().putString("星期"+number3,db2.child("weeks").getValue().toString()).commit();
+                    sp.edit().putString("是否營業"+number3,db2.child("是否營業").getValue().toString()).commit();
+                    sp.edit().putString("開"+number3,db2.child("開").getValue().toString()).commit();
+                    sp.edit().putString("關"+number3,db2.child("關").getValue().toString()).commit();
+                    Log.d(TAG,"星期:"+number3+db2.child("weeks").getValue().toString());
+                    number3++;
                 }
 
             }
@@ -226,25 +231,35 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
-        //取得firebase店址資料
-//        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                if(sp.getString("店數","").equals("")||isUpdate){
-//                    Log.d(TAG,"sp1:"+dataSnapshot.child("店址").getChildrenCount());
-//                    for(int i=0;i<dataSnapshot.child("店址").getChildrenCount();i++){
-//                        Log.d(TAG,"sp2:"+dataSnapshot.child("店址").child((i+1)+"").child("住址").getValue().toString());
-//                        sp.edit().putString("店數",dataSnapshot.child("店址").getChildrenCount()+"").commit();
-//                        sp.edit().putString(i+"店址",dataSnapshot.child("店址").child((i+1)+"").child("住址").getValue().toString()).commit();
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
+        //抓firebase外送地址
+        userRef = db.getReference("店址");
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                number4=0;
+                number5=0;
+                Log.d(TAG,"外送地址:"+dataSnapshot.getChildrenCount());
+                for(DataSnapshot db3:dataSnapshot.getChildren()){
+                    sp.edit().putString("city"+number4,db3.child("city").getValue().toString()).commit();
+                    sp.edit().putString("town"+number4,db3.child("town").getValue().toString()).commit();
+                    Log.d(TAG,"外送地址:"+db3.child("city").getValue().toString());
+                    Log.d(TAG,"外送地址:"+db3.child("town").getValue().toString());
+                    sp.edit().putString(number4+"路數",db3.child("road").getChildrenCount()+"").commit();
+                    Log.d(TAG,number4+"路數:"+db3.child("road").getChildrenCount()+"");
+                    for (DataSnapshot db4:db3.child("road").getChildren()){
+                        sp.edit().putString("town"+number4+"road"+number5,db4.getValue().toString());
+                        Log.d(TAG,"town"+number4+"road"+number5+db4.getValue().toString());
+                        number5++;
+                    }
+                    number4++;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 /////////////////////////////////////////////////////////
     @Override

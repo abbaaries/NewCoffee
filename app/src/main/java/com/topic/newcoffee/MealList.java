@@ -55,20 +55,24 @@ public class MealList extends AppCompatActivity {
         sp = getSharedPreferences("PREF",MODE_PRIVATE);
     }
     void setGrid() {
+        Log.d(TAG,"setGrid :");
         mylist.clear();
-        img = getResources().obtainTypedArray(R.array.coffee_images);
         name = new String[Integer.valueOf(sp.getString("咖啡種類個數",""))];
-        for (int i=0;i<Integer.valueOf(sp.getString("咖啡種類個數",""));i++){
-            Log.d(TAG,"咖啡種類個數"+i+sp.getString(("coffee"+i),""));
-
+        img = getResources().obtainTypedArray(R.array.coffee_images);
+        //從shared 抓取名字陣列
+        for (int i=0;i<name.length;i++){
             name[i] = sp.getString(("coffee"+i),"");
+            Log.d(TAG,"咖啡種類:"+i+sp.getString(("coffee"+i),""));
         }
+
 //        name= getResources().getStringArray(R.array.coffee_list);
+        // 從SQLite 抓取杯數資料
         amount = new int[name.length];
         for (int i=0;i<name.length;i++){
             amount[i] = mDbHelper.getCoffee(name[i]);
+            Log.d(TAG,"杯數:"+amount[i]);
         }
-
+        //建立 gridView
         for (int i=0;i<name.length;i++) {
             m = new HashMap<>();
             m.put("img", img.getResourceId(i,-1));
@@ -80,7 +84,7 @@ public class MealList extends AppCompatActivity {
         grid.setAdapter(simpleAdapter);
         grid.setOnItemClickListener(itemClickListener);
     }
-
+        //gridView 設定監聽器
     AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener(){
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -107,7 +111,7 @@ public class MealList extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
-
+        //OptionsMenu的監聽器
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){

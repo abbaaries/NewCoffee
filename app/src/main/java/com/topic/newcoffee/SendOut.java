@@ -31,7 +31,7 @@ public class SendOut extends AppCompatActivity {
     ArrayList<ArrayList<String>> arrayList1;
     ArrayList<String> arrayList2;
     Button btnAddAddr;
-    private TextView tvAddr,tvChangeAddr,warningInfo2,orderInfo2,tvShowDate2,tvOpenTime2;
+    private TextView tvAddr,tvChangeAddr,warningInfo2,orderInfo2,tvShowDate2,tvOp11,tvOp12,tvOp13,tvOp14,tvOp15,tvOp16,tvOp17;
     public static int tYear,tMomth,tDay,tAm_Pm= Calendar.AM,tHour=1,tMinute=1;
     public static String address;
     String PREF_ADDRESS,date,TAG="SendOut";
@@ -41,12 +41,14 @@ public class SendOut extends AppCompatActivity {
     int tY,tM,tD;
     FirebaseDatabase db;
     DatabaseReference userRef;
+    SharedPreferences sp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_out);
         db = FirebaseDatabase.getInstance();
         userRef = db.getReference("營業時間");
+        sp = getSharedPreferences("PREF",MODE_PRIVATE);
         findView();
         setText();
         picker();
@@ -58,8 +60,7 @@ public class SendOut extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         getOpeningTime();
-        SharedPreferences settings = getSharedPreferences(PREF_ADDRESS,MODE_PRIVATE);
-        address=settings.getString("MYADDRESS","");
+        address=sp.getString("MYADDRESS","");
         if (address.length()>0){
             btnAddAddr.setVisibility(View.INVISIBLE);
             tvAddr.setText(address);
@@ -75,12 +76,19 @@ public class SendOut extends AppCompatActivity {
         tvChangeAddr = (TextView)findViewById(R.id.tv_change_address);
         tvAddr = (TextView)findViewById(R.id.tv_address);
         tvShowDate2 = (TextView)findViewById(R.id.tv_showDate2);
+        tvOp11 = (TextView) findViewById(R.id.tvOpeningTime11);
+        tvOp12 = (TextView) findViewById(R.id.tvOpeningTime12);
+        tvOp13 = (TextView) findViewById(R.id.tvOpeningTime13);
+        tvOp14 = (TextView) findViewById(R.id.tvOpeningTime14);
+        tvOp15 = (TextView) findViewById(R.id.tvOpeningTime15);
+        tvOp16 = (TextView) findViewById(R.id.tvOpeningTime16);
+        tvOp17 = (TextView) findViewById(R.id.tvOpeningTime17);
         np7 = (NumberPicker)findViewById(R.id.ampmPicker2);
         np8 = (NumberPicker)findViewById(R.id.hourPicker2);
         np9 = (NumberPicker)findViewById(R.id.secPicker2);
         warningInfo2 = (TextView)findViewById(R.id.warning_info32);
         orderInfo2 = (TextView)findViewById(R.id.order_info32);
-        tvOpenTime2 = (TextView)findViewById(R.id.tv_openTime2);
+
 //        imageBtn3 = (ImageButton)findViewById(R.id.imgBtn3);
     }
     void setListener(){
@@ -99,12 +107,39 @@ public class SendOut extends AppCompatActivity {
         tHour = myS.getNow()[4];
         tMinute = myS.getNow()[5];
         tvShowDate2.setText(tYear+"/"+(tMomth>=10?tMomth:("0"+tMomth))+"/"+(tDay>=10?tDay:("0"+tDay)));
-//        c = Calendar.getInstance();
-//        cNow= Calendar.getInstance();
-//        tY = cNow.get(Calendar.YEAR);
-//        tM = cNow.get(Calendar.MONTH)+1;
-//        tD = cNow.get(Calendar.DAY_OF_MONTH);
-//        tvShowDate2.setText(tY+"/"+(tM>=10?tM:("0"+tM))+"/"+(tD>=10?tD:("0"+tD)));
+        String[] weeks = new String[7];
+        String[] isOpen = new String[7];
+        String[] start = new String[7];
+        String[] close = new String[7];
+        String[] e = new String[7];
+        for (int i=0;i<isOpen.length;i++){
+            weeks[i]=sp.getString("星期"+i,"");
+            start[i]=sp.getString("開"+i,"");
+            e[i]="  |";
+            close[i]=sp.getString("關"+i,"");
+            isOpen[i]=sp.getString("是否營業"+i,"");
+            if (Integer.valueOf(start[i])<10){
+                start[i]=" "+start[i];
+            }
+            if (Integer.valueOf(close[i])<10){
+                close[i]=" "+close[i];
+            }
+            if (isOpen[i].equals("false")){
+                start[i]="休";
+                e[i]="息";
+                close[i]="日";
+            }
+            Log.d(TAG,"是否營業:"+isOpen[i]);
+
+        }
+        Log.d(TAG,"營業:"+weeks[0]+isOpen[0]+start[0]+close[0]);
+        tvOp11.setText(weeks[0]+"\n\t  "+start[0]+"\n\t  "+e[0]+"\n\t  "+close[0]);
+        tvOp12.setText(weeks[1]+"\n\t  "+start[1]+"\n\t  "+e[1]+"\n\t  "+close[1]);
+        tvOp13.setText(weeks[2]+"\n\t  "+start[2]+"\n\t  "+e[2]+"\n\t  "+close[2]);
+        tvOp14.setText(weeks[3]+"\n\t  "+start[3]+"\n\t  "+e[3]+"\n\t  "+close[3]);
+        tvOp15.setText(weeks[4]+"\n\t  "+start[4]+"\n\t  "+e[4]+"\n\t  "+close[4]);
+        tvOp16.setText(weeks[5]+"\n\t  "+start[5]+"\n\t  "+e[5]+"\n\t  "+close[5]);
+        tvOp17.setText(weeks[6]+"\n\t  "+start[6]+"\n\t  "+e[6]+"\n\t  "+close[6]);
     }
     void dateCalendar(){
         Calendar calendar = Calendar.getInstance();
@@ -178,16 +213,17 @@ public class SendOut extends AppCompatActivity {
             }
         });
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_firstpage,menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
+    //Menu
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu_firstpage,menu);
+//        return super.onCreateOptionsMenu(menu);
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        return super.onOptionsItemSelected(item);
+//    }
     View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -208,55 +244,7 @@ public class SendOut extends AppCompatActivity {
         warningInfo2.setText(R.string.warning_info);
         orderInfo2.setText(R.string.order_info);
     }
-    void countTime(){
-        tYear = tY;
-        tMomth = tM;
-        tDay = tD;
 
-        if(tHour == 24) {
-            if (tYear % 4 == 0) {
-                if (tDay == 30 && tMomth == 2) {
-                    tDay = 0;
-                    tMomth += 1;
-                }
-                if (tYear % 100 == 0) {
-                    if (tDay == 29 && tMomth == 2) {
-                        tDay = 0;
-                        tMomth += 1;
-                    }
-                    if (tYear % 400 == 0) {
-                        if (tDay == 30 && tMomth == 2) {
-                            tDay = 0;
-                            tMomth += 1;
-                        }
-                        if (tYear % 4000 == 0) {
-                            if (tDay == 29 && tMomth == 2) {
-                                tDay = 0;
-                                tMomth += 1;
-                            }
-                        }
-                    }
-                }
-            }
-            tHour = 0;
-            tDay += 1;
-            if ((tDay == 31 && (tMomth == 4 || tMomth == 6 || tMomth == 9 || tMomth == 11))||(tDay ==29 && tMomth==2)) {
-                tDay = 1;
-                tMomth += 1;
-            }
-            if (tDay == 32 && (tMomth == 1 || tMomth == 3 || tMomth == 5 || tMomth == 7 || tMomth == 8 || tMomth == 10 || tMomth == 12)) {
-                if (tMomth == 12) {
-                    tDay = 1;
-                    tMomth = 1;
-                    tYear += 1;
-                    Log.d("TAGT", "1月1日");
-                } else {
-                    tDay = 1;
-                    tMomth += 1;
-                }
-            }
-        }
-    }
     public void btnNext3(View v) {
         int[] s =myS.countTime(tYear,tMomth,tDay,tAm_Pm,tHour);
         Log.d(TAG,"s:"+s[0]+s[1]+s[2]+s[4]+tMinute);

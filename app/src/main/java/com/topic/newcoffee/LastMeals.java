@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class LastMeals extends AppCompatActivity implements AdapterView.OnItemClickListener{
     final String TAG = "ChangeMeals";
@@ -146,20 +147,20 @@ public class LastMeals extends AppCompatActivity implements AdapterView.OnItemCl
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-//        mDbHelper.close();
-    }
 
     public void btnNext1(View view) {
         Intent it = new Intent();
-        if (MainActivity.isSendOut==true){
-            it.setClass(LastMeals.this,SendOut.class);
+        if(mDbHelper.getAllPrice()!=0){
+            if (MainActivity.isSendOut==true){
+                it.setClass(LastMeals.this,SendOut.class);
+            }else {
+                it.setClass(LastMeals.this,TakeMeals.class);
+            }
+            startActivity(it);
         }else {
-            it.setClass(LastMeals.this,TakeMeals.class);
+            Toast.makeText(this,"請選擇欲購買的咖啡",Toast.LENGTH_SHORT).show();
         }
-        startActivity(it);
+
     }
 }
 

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,12 +16,17 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class SendOutAddress extends AppCompatActivity {
     private Context context;
     ArrayAdapter<CharSequence> adapter;
     Spinner sprCity,sprTown,sprRoad;
     EditText etroadnum,etlanenum,etnum,etnum2,etfloornum,etfloornum2,etroomnum;
-    String ADDRESS,loc,city,town,road,PREF_ADDRESS;
+    String ADDRESS,loc,city,town,road;
+    SharedPreferences sp;
+    ArrayList cityList,twonList,roadList;
+    String TAG="SendOutAddress";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,19 +48,18 @@ public class SendOutAddress extends AppCompatActivity {
         etfloornum2 = (EditText) findViewById(R.id.et_floor_num2);
         etroomnum = (EditText) findViewById(R.id.et_room_num);
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_firstpage,menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        return super.onOptionsItemSelected(item);
-    }
-
+    //Menu
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu_firstpage,menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        return super.onOptionsItemSelected(item);
+//    }
+        //選擇縣市 下拉式選單  設定鄉鎮 下拉式選單
     AdapterView.OnItemSelectedListener itemSelectedListener1 = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -74,8 +79,8 @@ public class SendOutAddress extends AppCompatActivity {
 
         }
     };
+    //選擇鄉鎮 下拉式選單    設定道路 下拉式選單
     AdapterView.OnItemSelectedListener itemSelectedListener2 = new AdapterView.OnItemSelectedListener() {
-
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             if (sprTown.getSelectedItemPosition() != 0) {
@@ -96,6 +101,7 @@ public class SendOutAddress extends AppCompatActivity {
         public void onNothingSelected(AdapterView<?> parent) {
         }
     };
+    //選擇道路 下拉式選單
     AdapterView.OnItemSelectedListener itemSelectedListener3 = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -112,6 +118,7 @@ public class SendOutAddress extends AppCompatActivity {
         sprRoad.setOnItemSelectedListener(itemSelectedListener3);
     }
     void ArrayAdapter() {
+        getAddrInfo();
         adapter = ArrayAdapter.createFromResource(this, R.array.city_name_array, android.R.layout.simple_dropdown_item_1line);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sprCity.setAdapter(adapter);
@@ -150,14 +157,29 @@ public class SendOutAddress extends AppCompatActivity {
         }
         loc=r1+r2+n1+n2+f1+f2+m;
     }
-
+    void getAddrInfo(){
+        sp=getSharedPreferences("PREF",MODE_PRIVATE);
+        cityList = new ArrayList();
+        twonList = new ArrayList();
+        roadList = new ArrayList();
+        for (int i=0;i<Integer.valueOf(sp.getString("店數",""));i++){
+            Log.d(TAG,"店數"+sp.getString("店數",""));
+            cityList.add(sp.getString("city"+i,""));
+            twonList.add(sp.getString("town"+i,""));
+            Log.d(TAG,"city"+sp.getString("city"+i,"")+"town"+sp.getString("town"+i,""));
+            for (int j=0;j<Integer.valueOf(sp.getString(i+"路數",""));j++){
+                roadList.add(sp.getString("town"+i+"road"+j,""));
+                Log.d(TAG,"town:road:"+sp.getString("town"+i+"road"+j,""));
+            }
+        }
+    }
     public void btnNext4(View view) {
         if(sprCity.getSelectedItemPosition()!=0&&sprTown.getSelectedItemPosition()!=0&&sprRoad.getSelectedItemPosition()!=0&&etnum.length()!=0){
             setEtRoadNum();
             ADDRESS = city+town+road+loc;
             Toast.makeText(SendOutAddress.this,"已新增完成",Toast.LENGTH_LONG).show();
-            SharedPreferences settings = getSharedPreferences(PREF_ADDRESS,MODE_PRIVATE);
-            settings.edit().putString("MYADDRESS",ADDRESS).commit();
+            sp = getSharedPreferences("PREF",MODE_PRIVATE);
+            sp.edit().putString("MYADDRESS",ADDRESS).commit();
             Intent it = new Intent();
             it.setClass(SendOutAddress.this,SendOut.class);
             startActivity(it);

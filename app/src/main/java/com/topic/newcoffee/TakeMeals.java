@@ -35,7 +35,7 @@ public class TakeMeals extends AppCompatActivity {
     public static String shopAddress,TAG="TakeMeals";
     public static int tYear,tMomth,tDay,tAm_Pm=Calendar.AM,tHour=1,tMinute=1;
     private Context context;
-    private TextView StoreLocation,tv_changeAddr,tv_showDate,warningInfo,orderInfo;
+    private TextView StoreLocation,tv_changeAddr,tv_showDate,warningInfo,orderInfo,tvOp1,tvOp2,tvOp3,tvOp4,tvOp5,tvOp6,tvOp7;
     String date,start,close,w1;
     boolean b=false;
     ArrayList<ArrayList<String>> arrayList1;
@@ -71,6 +71,13 @@ public class TakeMeals extends AppCompatActivity {
         StoreLocation = (TextView) findViewById(R.id.show_usual_store);
         tv_changeAddr = (TextView) findViewById(R.id.tv_changeAddr);
         tv_showDate = (TextView) findViewById(R.id.tv_showDate);
+        tvOp1 = (TextView) findViewById(R.id.tvOpeningTime1);
+        tvOp2 = (TextView) findViewById(R.id.tvOpeningTime2);
+        tvOp3 = (TextView) findViewById(R.id.tvOpeningTime3);
+        tvOp4 = (TextView) findViewById(R.id.tvOpeningTime4);
+        tvOp5 = (TextView) findViewById(R.id.tvOpeningTime5);
+        tvOp6 = (TextView) findViewById(R.id.tvOpeningTime6);
+        tvOp7 = (TextView) findViewById(R.id.tvOpeningTime7);
         warningInfo = (TextView) findViewById(R.id.warning_info2);
         orderInfo = (TextView) findViewById(R.id.order_info2);
         np4 = (NumberPicker)findViewById(R.id.numberPicker4);
@@ -80,14 +87,18 @@ public class TakeMeals extends AppCompatActivity {
 
 
     void setText(){
+        //shard 取得店數
         tv_changeAddr.setVisibility(View.INVISIBLE);
         String[] shops = new String[Integer.valueOf(sp.getString("店數",""))];
-        for (int i=0;i<Integer.valueOf(sp.getString("店數",""));i++){
-            shops[i] = sp.getString(i+"店址","");
+        Log.d(TAG,"店數:"+shops.length);
+        //shard取得店址
+        for (int i=0;i<shops.length;i++){
+            shops[i] = sp.getString("店址"+i,"");
         }
-//        String[] shops = getResources().getStringArray(R.array.shop_location);
+        Log.d(TAG,"店址:"+shops[0]);
         shopAddress = shops[0];
         StoreLocation.setText(shopAddress);
+        //取得手機的時間
         tYear = myS.getNow()[0];
         tMomth = myS.getNow()[1];
         tDay = myS.getNow()[2];
@@ -95,6 +106,7 @@ public class TakeMeals extends AppCompatActivity {
         tHour = myS.getNow()[4];
         tMinute = myS.getNow()[5];
         tv_showDate.setText(tYear+"/"+(tMomth>=10?tMomth:("0"+tMomth))+"/"+(tDay>=10?tDay:("0"+tDay)));
+
     }
     void dateCalendar(){
         DatePickerDialog datePickerDialog = new DatePickerDialog(
@@ -168,17 +180,17 @@ public class TakeMeals extends AppCompatActivity {
         tv_changeAddr.setOnClickListener(listener);
         tv_showDate.setOnClickListener(listener);
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_firstpage,menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
+        //Menu
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu_firstpage,menu);
+//        return super.onCreateOptionsMenu(menu);
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        return super.onOptionsItemSelected(item);
+//    }
     View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -195,56 +207,6 @@ public class TakeMeals extends AppCompatActivity {
         warningInfo.setText(R.string.warning_info);
         orderInfo.setText(R.string.order_info);
     }
-    void countTime(){
-        tYear = tY;
-        tMomth = tM;
-        tDay = tD;
-
-        if(tHour == 24) {
-            if (tYear % 4 == 0) {
-                if (tDay == 30 && tMomth == 2) {
-                    tDay = 0;
-                    tMomth += 1;
-                }
-                if (tYear % 100 == 0) {
-                    if (tDay == 29 && tMomth == 2) {
-                        tDay = 0;
-                        tMomth += 1;
-                    }
-                    if (tYear % 400 == 0) {
-                        if (tDay == 30 && tMomth == 2) {
-                            tDay = 0;
-                            tMomth += 1;
-                        }
-                        if (tYear % 4000 == 0) {
-                            if (tDay == 29 && tMomth == 2) {
-                                tDay = 0;
-                                tMomth += 1;
-                            }
-                        }
-                    }
-                }
-            }
-            tHour = 0;
-            tDay += 1;
-            if ((tDay == 31 && (tMomth == 4 || tMomth == 6 || tMomth == 9 || tMomth == 11))||(tDay ==29 && tMomth==2)) {
-                tDay = 1;
-                tMomth += 1;
-            }
-            if (tDay == 32 && (tMomth == 1 || tMomth == 3 || tMomth == 5 || tMomth == 7 || tMomth == 8 || tMomth == 10 || tMomth == 12)) {
-                if (tMomth == 12) {
-                    tDay = 1;
-                    tMomth = 1;
-                    tYear += 1;
-                    Log.d("TAGT", "1月1日");
-                } else {
-                    tDay = 1;
-                    tMomth += 1;
-                }
-            }
-        }
-    }
-
 
     public void btnNext2(View v) {
         int[] s =myS.countTime(tYear,tMomth,tDay,tAm_Pm,tHour);
@@ -261,6 +223,41 @@ public class TakeMeals extends AppCompatActivity {
         }
     }
     public AbstractList<ArrayList<String>> getOpeningTime(){
+        //取得營業時間
+        String[] weeks = new String[7];
+        String[] isOpen = new String[7];
+        String[] start = new String[7];
+        String[] close = new String[7];
+        String[] e = new String[7];
+        for (int i=0;i<isOpen.length;i++){
+            weeks[i]=sp.getString("星期"+i,"");
+            start[i]=sp.getString("開"+i,"");
+            e[i]="  |";
+            close[i]=sp.getString("關"+i,"");
+            isOpen[i]=sp.getString("是否營業"+i,"");
+            if (Integer.valueOf(start[i])<10){
+                start[i]=" "+start[i];
+            }
+            if (Integer.valueOf(close[i])<10){
+                close[i]=" "+close[i];
+            }
+            if (isOpen[i].equals("false")){
+                start[i]="休";
+                e[i]="息";
+                close[i]="日";
+            }
+            Log.d(TAG,"是否營業:"+isOpen[i]);
+
+        }
+        Log.d(TAG,"營業:"+weeks[0]+isOpen[0]+start[0]+close[0]);
+        tvOp1.setText(weeks[0]+"\n\t  "+start[0]+"\n\t  "+e[0]+"\n\t  "+close[0]);
+        tvOp2.setText(weeks[1]+"\n\t  "+start[1]+"\n\t  "+e[1]+"\n\t  "+close[1]);
+        tvOp3.setText(weeks[2]+"\n\t  "+start[2]+"\n\t  "+e[2]+"\n\t  "+close[2]);
+        tvOp4.setText(weeks[3]+"\n\t  "+start[3]+"\n\t  "+e[3]+"\n\t  "+close[3]);
+        tvOp5.setText(weeks[4]+"\n\t  "+start[4]+"\n\t  "+e[4]+"\n\t  "+close[4]);
+        tvOp6.setText(weeks[5]+"\n\t  "+start[5]+"\n\t  "+e[5]+"\n\t  "+close[5]);
+        tvOp7.setText(weeks[6]+"\n\t  "+start[6]+"\n\t  "+e[6]+"\n\t  "+close[6]);
+
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -275,6 +272,7 @@ public class TakeMeals extends AppCompatActivity {
                     arrayList2.add(3,dataSnapshot.child((j+1)+"").child("關").getValue().toString());
                     arrayList1.add(arrayList2);
                 }
+                Log.d(TAG,arrayList1.get(1)+"");
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
