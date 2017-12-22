@@ -16,7 +16,7 @@
 
     <array name="town_name_array">
         <item>--------  請選擇鄉鎮  --------</item>
-        <item >后里區</item>
+        <item>后里區</item>
         <item>豐原區</item>
     </array>
 
@@ -92,30 +92,56 @@
         <item>卡布奇諾</item>
     </array>
     <array name="coffee_middle">
-        <item>12oz</item>
-        <item>12oz</item>
-        <item>12oz</item>
-        <item>12oz</item>
-        <item>12oz</item>
-        <item>12oz</item>
-        <item>12oz</item>
+        <item>中杯 : 12oz</item>
+        <item>中杯 : 12oz</item>
+        <item>中杯 : 12oz</item>
+        <item>中杯 : 12oz</item>
+        <item>中杯 : 12oz</item>
+        <item>中杯 : 12oz</item>
+        <item>中杯 : 12oz</item>
+    </array>
+    <array name="coffee_images">
+        <item>@drawable/coffee1</item>
+        <item>@drawable/coffee2</item>
+        <item>@drawable/coffee3</item>
+        <item>@drawable/coffee4</item>
+        <item>@drawable/coffee5</item>
+        <item>@drawable/coffee6</item>
+        <item>@drawable/coffee7</item>
     </array>
     <array name="coffee_big_ice">
-        <item>16oz</item>
-        <item>16oz</item>
-        <item>20oz</item>
-        <item>20oz</item>
-        <item>16oz</item>
-        <item>20oz</item>
-        <item>16oz</item>
+        <item>大杯(冰) : 16oz</item>
+        <item>大杯(冰) : 16oz</item>
+        <item>大杯(冰) : 20oz</item>
+        <item>大杯(冰) : 20oz</item>
+        <item>大杯(冰) : 16oz</item>
+        <item>大杯(冰) : 20oz</item>
+        <item>大杯(冰) : 16oz</item>
     </array>
     <array name="coffee_big_hot">
-        <item>16oz</item>
-        <item>16oz</item>
-        <item>16oz</item>
-        <item>16oz</item>
-        <item>16oz</item>
-        <item>20oz</item>
-        <item>16oz</item>
+        <item>大杯(熱) : 16oz</item>
+        <item>大杯(熱) : 16oz</item>
+        <item>大杯(熱) : 16oz</item>
+        <item>大杯(熱) : 16oz</item>
+        <item>大杯(熱) : 16oz</item>
+        <item>大杯(熱) : 20oz</item>
+        <item>大杯(熱) : 16oz</item>
+    </array>
+    <array name="time_meridiem">
+        <item>AM</item>
+        <item>PM</item>
+
+    </array>
+
+    <array name="time_interval">
+        <item>01~10</item>
+        <item>11~20</item>
+        <item>21~30</item>
+        <item>31~40</item>
+        <item>41~50</item>
+        <item>51~00</item>
+    </array>
+    <array name="shop_location">
+        <item>台中市后里區民生路213號</item>
     </array>
 </resources>

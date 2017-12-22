@@ -3,6 +3,8 @@ package com.topic.newcoffee;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.TypedArray;
+import android.nfc.Tag;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -26,69 +28,54 @@ import java.util.Map;
 import java.util.zip.Inflater;
 
 public class MealList extends AppCompatActivity {
-
-    GridView grid ;
+    final String TAG ="MealList";
     public static ArrayList<Map<String,Object>> mylist;
-    public static ArrayList<Map<String,String>> billList;
+    public static boolean isInsert,isUpdate;
+    public static int kind,num,money;
+    public static TypedArray img;
+    private DB mDbHelper;
+    String[] name;
+    int[] amount,pr;
+    HashMap<String,Object> m;
+    GridView grid ;
     SimpleAdapter simpleAdapter;
-    String[] fun;
-
-    public static int[] img;
     Intent it;
-    HashMap<String,Object> m1,m2,m3,m4,m5,m6,m7;
-    public static int kind,amount0,amount1,amount2,amount3,amount4,amount5,amount6,pr0,pr1,pr2,pr3,pr4,pr5,pr6,num,money;
-    int pr[];
+    SharedPreferences sp ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_meal_list);
+        mDbHelper= new DB(this).open();
         pr = new int[6];
         mylist = new ArrayList<>();
-        setContentView(R.layout.activity_meal_list);
         simpleAdapter = new SimpleAdapter(this,mylist,R.layout.myitem, new String[]{"name","total","img"}
                 , new int[]{R.id.tv_name,R.id.tv_total,R.id.img_coffee});
-        m1 = new HashMap<>();
-        m2 = new HashMap<>();
-        m3 = new HashMap<>();
-        m4 = new HashMap<>();
-        m5 = new HashMap<>();
-        m6 = new HashMap<>();
-        m7 = new HashMap<>();
         it = new Intent();
-        fun= getResources().getStringArray(R.array.coffee_list);
-        img = new int[]{R.drawable.coffee1,R.drawable.coffee2,R.drawable.coffee3,R.drawable.coffee4,R.drawable.coffee5,R.drawable.coffee6,R.drawable.coffee7};
-        Log.d("test","onCreate");
+        Log.d(TAG,"MealList:onCreate");
+        sp = getSharedPreferences("PREF",MODE_PRIVATE);
     }
     void setGrid() {
-
         mylist.clear();
-        m1.put("name", fun[0]);
-        m1.put("total", "x" + amount0);
-        m1.put("img", img[0]);
-        m2.put("name", fun[1]);
-        m2.put("total", "x" + amount1);
-        m2.put("img", img[1]);
-        m3.put("name", fun[2]);
-        m3.put("total", "x" + amount2);
-        m3.put("img", img[2]);
-        m4.put("name", fun[3]);
-        m4.put("total", "x" + amount3);
-        m4.put("img", img[3]);
-        m5.put("name", fun[4]);
-        m5.put("total", "x" + amount4);
-        m5.put("img", img[4]);
-        m6.put("name", fun[5]);
-        m6.put("total", "x" + amount5);
-        m6.put("img", img[5]);
-        m7.put("name", fun[6]);
-        m7.put("total", "x" + amount6);
-        m7.put("img", img[6]);
-        mylist.add(m1);
-        mylist.add(m2);
-        mylist.add(m3);
-        mylist.add(m4);
-        mylist.add(m5);
-        mylist.add(m6);
-        mylist.add(m7);
+        img = getResources().obtainTypedArray(R.array.coffee_images);
+        name = new String[Integer.valueOf(sp.getString("咖啡種類個數",""))];
+        for (int i=0;i<Integer.valueOf(sp.getString("咖啡種類個數",""));i++){
+            Log.d(TAG,"咖啡種類個數"+i+sp.getString(("coffee"+i),""));
+
+            name[i] = sp.getString(("coffee"+i),"");
+        }
+//        name= getResources().getStringArray(R.array.coffee_list);
+        amount = new int[name.length];
+        for (int i=0;i<name.length;i++){
+            amount[i] = mDbHelper.getCoffee(name[i]);
+        }
+
+        for (int i=0;i<name.length;i++) {
+            m = new HashMap<>();
+            m.put("img", img.getResourceId(i,-1));
+            m.put("name", name[i]);
+            m.put("total", "x" + amount[i]);
+            mylist.add(m);
+        }
         grid = (GridView)findViewById(R.id.grid_view_list);
         grid.setAdapter(simpleAdapter);
         grid.setOnItemClickListener(itemClickListener);
@@ -98,10 +85,8 @@ public class MealList extends AppCompatActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             kind = position;
-//            if((kind==0&&amount0!=0)||(kind==1&&amount1!=0)||(kind==2&&amount2!=0)||(kind==3&&amount3!=0)||(kind==4&&amount4!=0)||(kind==5&&amount5!=0)||(kind==6&&amount6!=0))it.setClass(MealList.this,ChangeMeals.class);
-//            else
-                it.setClass(MealList.this,CoffeeMenu.class);
-            Log.d("test11","kind="+kind);
+            it.setClass(MealList.this,CoffeeMenu.class);
+            Log.d(TAG,"MealList kind:"+kind);
             startActivity(it);
         }
     };
@@ -109,51 +94,12 @@ public class MealList extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("test55","onResume");
-        Log.d("test11",kind+"num="+num);
-        switch (kind){
-            case 0:
-                amount0+=num;
-                pr0+=money;
-                Log.d("test12","amount0="+pr0);
-
-
-                break;
-            case 1:
-                amount1+=num;
-                pr1+=money;
-                Log.d("test12","amount1="+pr1);
-                break;
-            case 2:
-                amount2+=num;
-                pr2+=money;
-                Log.d("test12","amount2="+pr2);
-                break;
-            case 3:
-                amount3+=num;
-                pr3+=money;
-                Log.d("test12","amount3="+pr3);
-                break;
-            case 4:
-                amount4+=num;
-                pr4+=money;
-                Log.d("test12","amount4="+pr4);
-                break;
-            case 5:
-                amount5+=num;
-                pr5+=money;
-                Log.d("test12","amount5="+pr5);
-                break;
-            case 6:
-                amount6+=num;
-                pr6+=money;
-                Log.d("test12","amount6="+pr6);
-                break;
-        }
+        isInsert = false;
+        isUpdate = false;
+        Log.d(TAG,"onResume kind:"+kind+"num:"+num);
         num=0;
         money=0;
         setGrid();
-
     }
 
     @Override
@@ -166,11 +112,10 @@ public class MealList extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.buy_items:
-                if(pr0==0&&pr1==0&&pr2==0&&pr3==0&&pr4==0&&pr5==0&&pr6==0) {
+                if(amount[0]==0&&amount[1]==0&&amount[2]==0&&amount[3]==0&&amount[4]==0&&amount[5]==0&&amount[6]==0) {
                     Toast.makeText(MealList.this,"請選擇欲購買的咖啡",Toast.LENGTH_SHORT).show();
-
                 }else {
-                    it.setClass(this, ChangeMeals.class);
+                    it.setClass(this, LastMeals.class);
                     startActivity(it);
                 }
                 break;
@@ -181,4 +126,12 @@ public class MealList extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        it.setClass(this,MainActivity.class);
+        startActivity(it);
+    }
+
 }

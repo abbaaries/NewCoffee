@@ -1,85 +1,194 @@
 package com.topic.newcoffee;
 
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
+
+
 import android.content.SharedPreferences;
-import android.support.v7.app.AlertDialog;
+import android.content.res.TypedArray;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.util.Calendar;
+
 
 public class CoffeeMenu extends AppCompatActivity {
-    String[] values1,values2,values3;
-    NumberPicker np1,np2,np3;
+    final String TAG ="CoffeeMenu";
+    private DB mDbHelper;
+    private boolean isInsert=false,isUpdate=false;
+    String[] values1,values2,values3,name,middle,bigHot,bigIce;
+    NumberPicker nameNp,np1,np2,np3;
     ImageView imgCoffee;
     TextView tvName,tv1,tv2,tv3,tvPrice,tvNum;
     Button btnReduce,btnAdd,btnPlus;
-    int count=1,kind=0,newVal1=0,newVal2,newVal3=0,values;
-    String unit="0",type,size,sugar;
-    int[] img;
-
+    int amount,kind,newVal3,sum,item;
+    String unit,type,size,sugar;
+    TypedArray img;
+    long rowId;
+    SharedPreferences sp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coffee_menu);
-        SharedPreferences pref = getSharedPreferences("bill",MODE_PRIVATE);
-
-        findView();
+        sp = getSharedPreferences("PREF",MODE_PRIVATE);
         kind = MealList.kind;
-        img = MealList.img;
-        setText();
+        img = getResources().obtainTypedArray(R.array.coffee_images);
+        isInsert = MealList.isInsert;
+        isUpdate = MealList.isUpdate;
+        findView();
         picker();
+        setText();
         btClickListener();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mDbHelper==null)
+        mDbHelper= new DB(this).open();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
 
     }
-    void findView(){
-        tvName = (TextView)findViewById(R.id.tv_coffeeName);
-        tv1 = (TextView)findViewById(R.id.textView1);
-        tv2 = (TextView)findViewById(R.id.textView2);
-        tv3 = (TextView)findViewById(R.id.textView3);
-        tvPrice = (TextView)findViewById(R.id.tv_totalPrice);
-        imgCoffee = (ImageView)findViewById(R.id.img_coffee);
 
-        np1 = (NumberPicker)findViewById(R.id.numberPicker1);
-        np2 = (NumberPicker)findViewById(R.id.numberPicker2);
-        np3 = (NumberPicker)findViewById(R.id.numberPicker3);
+    void findView(){
+        tvName = (TextView)findViewById(R.id.tv_coffeeName1);
+        tv1 = (TextView)findViewById(R.id.tView1);
+        tv2 = (TextView)findViewById(R.id.tView2);
+        tv3 = (TextView)findViewById(R.id.tView3);
+        tvPrice = (TextView)findViewById(R.id.tv_totalPrice1);
+        imgCoffee = (ImageView)findViewById(R.id.img_coffee1);
+        nameNp = (NumberPicker)findViewById(R.id.name_Picker1);
+        np1 = (NumberPicker)findViewById(R.id.typePicker1);
+        np2 = (NumberPicker)findViewById(R.id.sizePicker1);
+        np3 = (NumberPicker)findViewById(R.id.sugarPicker1);
         btnReduce = (Button)findViewById(R.id.btn_reduce);
         btnAdd = (Button)findViewById(R.id.btn_add);
-        btnPlus = (Button)findViewById(R.id.btn_plus);
         tvNum = (TextView)findViewById(R.id.tv_number);
+        btnPlus = (Button)findViewById(R.id.btn);
     }
     void setText(){
-        imgCoffee.setImageResource(img[kind]);
-        tv1.setText(R.string.midsize);
-        tv2.setText(R.string.hotbigsize);
-        tv3.setText(R.string.icebigSize);
-        if(kind==2|kind==3){
-            tv3.setText(R.string.icebigSize2);
-        }else if(kind==5){
-            tv2.setText(R.string.hotbigsize2);
-            tv3.setText(R.string.icebigSize2);
+        amount=1;
+        Log.d(TAG,""+sp.getString("咖啡種類個數",""));
+        name = new String[Integer.valueOf(sp.getString("咖啡種類個數",""))];
+        middle = new String[Integer.valueOf(sp.getString("咖啡種類個數",""))];
+        bigHot = new String[Integer.valueOf(sp.getString("咖啡種類個數",""))];
+        bigIce = new String[Integer.valueOf(sp.getString("咖啡種類個數",""))];
+        for (int i=0;i<Integer.valueOf(sp.getString("咖啡種類個數",""));i++){
+            Log.d(TAG,"sp1"+sp.getString("coffee"+i,""));
+            name[i]=sp.getString("coffee"+i,"");
+            middle[i]="中杯 : "+sp.getString("middle"+i,"");
+            bigHot[i]="大杯(熱) : "+sp.getString("bigHot"+i,"");
+            bigIce[i]="大杯(冰) : "+sp.getString("bigIce"+i,"");
         }
-        tvNum.setText(count+"");
-        String name[] = getResources().getStringArray(R.array.coffee_list);
-        String price[] = getResources().getStringArray(R.array.coffee_middle_price);
-        tvName.setText(name[kind]);
-        unit =price[kind];
-        tvPrice.setText(unit);
+//        name = getResources().getStringArray(R.array.coffee_list);
+//        middle = getResources().getStringArray(R.array.coffee_middle);
+//        bigHot = getResources().getStringArray(R.array.coffee_big_hot);
+//        bigIce = getResources().getStringArray(R.array.coffee_big_ice);
+        if(isUpdate){
+            updateSetText();
+        }else {
+            if(isInsert){
+                insertSetText();
+            }else {
+                btnPlus.setText("確認");
+                nameNp.setVisibility(View.INVISIBLE);
+                tvName.setText(name[kind]);
+            }
+        }
+        changedSetText();
+    }
+    void changedSetText(){
+        changeNumber();
+        imgCoffee.setImageResource(img.getResourceId(kind,-1));
+
+        tv1.setText(middle[kind]);
+        tv2.setText(bigHot[kind]);
+        tv3.setText(bigIce[kind]);
+
+    }
+    void changeNumber(){
+        String s;
+        if (type.equals("熱")&&size.equals("大杯")){
+            s = sp.getString("bigHotPr"+kind,"")+"元";
+//            s = getResources().getStringArray(R.array.coffee_big_hot_price)[kind];
+            Log.d(TAG,"s1:"+s);
+            unit = s.substring(0,s.length()-1);
+        }else if(type.equals("冷")&&size.equals("大杯")){
+            s = sp.getString("bigIcePr"+kind,"")+"元";
+//            s = getResources().getStringArray(R.array.coffee_big_ice_price)[kind];
+            Log.d(TAG,"s2:"+s);
+            unit = s.substring(0,s.length()-1);
+        }else {
+            s = sp.getString("middlePr"+kind,"")+"元";
+//            s = getResources().getStringArray(R.array.coffee_middle_price)[kind];
+            Log.d(TAG,"s3:"+s);
+            unit =s.substring(0,s.length()-1);
+        }
+        tvNum.setText(amount+"");
+        Log.d(TAG,"unit:"+unit+",amount"+amount);
+        sum = Integer.valueOf(unit)*amount;
+        tvPrice.setText(sum+"元");
+    }
+    void insertSetText(){
+        tvName.setVisibility(View.INVISIBLE);
+        btnPlus.setText("新增");
+        namePicker();
+    }
+    void updateSetText(){
+        nameNp.setVisibility(View.INVISIBLE);
+        btnPlus.setText("修改");
+        namePicker();
+        item=LastMeals.item;
+        Log.d(TAG,"item:"+item);
+
+//        long cRowId = mDbHelper.getrowId(item);
+//        int cKind = mDbHelper.getKind(item);
+//        cType = mDbHelper.getType(item);
+//        cSize = mDbHelper.getSize(item);
+//        cSugar = mDbHelper.getSugar(item);
+//        cAmount = mDbHelper.getAmount(item);
+//        cUnit = mDbHelper.getUnit(item)+"";
+//        tvName.setText(mDbHelper.getName(item));
+//        np1.setValue(type.equals("熱")?0:1);
+//        np2.setValue(size.equals("中杯")?0:1);
+//        np3.setValue(mDbHelper.getSugar(item).equals("無糖")?0:mDbHelper.getSugar(item).equals("少糖")?1:2);
+//        tvNum.setText(amount+"");
+//        tvPrice.setText(mDbHelper.getSum(item)+"元");
+        rowId = LastMeals.cRowId;
+        kind = LastMeals.cKind;
+        type = LastMeals.cType;
+        size = LastMeals.cSize;
+        sugar = LastMeals.cSugar;
+        amount = LastMeals.cAmount;
+        sum = LastMeals.cSum;
+        tvName.setText(LastMeals.cName);
+        np1.setValue(type.equals("熱")?0:1);
+        np2.setValue(size.equals("中杯")?0:1);
+        np3.setValue(sugar.equals("無糖")?0:sugar.equals("少糖")?1:2);
+        tvNum.setText(amount+"");
+        tvPrice.setText(sum+"元");
+    }
+    void namePicker(){
+
+        nameNp.setMaxValue(0);
+        nameNp.setMaxValue(name.length-1);
+        nameNp.setDisplayedValues(name);
+        nameNp.setWrapSelectorWheel(false);
+        nameNp.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                kind = picker.getValue();
+                changedSetText();
+            }
+        });
     }
     void picker (){
         values1 = getResources().getStringArray(R.array.hot_cold_size);
@@ -103,47 +212,30 @@ public class CoffeeMenu extends AppCompatActivity {
         np1.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-//                int kind = getIntent().getIntExtra("kind",0);
-                newVal1=newVal;
-                if( 1==newVal2 && 0==newVal1 )
-                    unit = getResources().getStringArray(R.array.coffee_big_hot_price)[kind];
-                else if( 1==newVal2  && 1==newVal1 )
-                    unit = getResources().getStringArray(R.array.coffee_big_ice_price)[kind];
-                else
-                    unit = getResources().getStringArray(R.array.coffee_middle_price)[kind];
-                type = values1[newVal1];
-                tvPrice.setText(unit);
-                tvPrice.setText(String.valueOf(count*Integer.valueOf(unit.substring(0,unit.length()-1)))+"元");
-                Log.d("test1","type="+type+",unit="+unit+",newVal1="+newVal1+",newVal2="+newVal2);
-                Log.d("test","種類="+kind+",type="+type+",size="+size+",sugar="+sugar+",數量="+count);
+                switch (picker.getValue()){
+                    case 0: type="熱";break;
+                    case 1: type="冷";break;
+                }
+                changeNumber();
             }
         });
         np2.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-//                int kind = getIntent().getIntExtra("kind", 0);
-                newVal2=newVal;
-                if(newVal1 == 0 && newVal2 == 1 )
-                    unit = getResources().getStringArray(R.array.coffee_big_hot_price)[kind];
-                else if(newVal1 == 1 && newVal2 == 1 )
-                    unit = getResources().getStringArray(R.array.coffee_big_ice_price)[kind];
-                else
-                    unit = getResources().getStringArray(R.array.coffee_middle_price)[kind];
-                size = values2[newVal2];
-                tvPrice.setText(unit);
-                tvPrice.setText(String.valueOf(count*Integer.valueOf(unit.substring(0,unit.length()-1)))+"元");
-
-                Log.d("test1","size="+size+",unit="+unit+",newVal1="+newVal1+",newVal2="+newVal2);
-                Log.d("test","種類="+kind+",type="+type+",size="+size+",sugar="+sugar+",數量="+count);
+                switch (picker.getValue()){
+                    case 0:size="中杯";break;
+                    case 1:size="大杯";break;
+                }
+                changeNumber();
             }
         });
 
         np3.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                newVal3 = picker.getValue();
                 sugar=values3[newVal3];
-                newVal3=newVal;
-                Log.d("test1","sugar="+sugar);
+                Log.d(TAG,"sugar="+sugar);
             }
         });
     }
@@ -151,32 +243,43 @@ public class CoffeeMenu extends AppCompatActivity {
         btnReduce.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(count>1)
-                count-=1;
-                tvNum.setText(count+"");
-                tvPrice.setText(String.valueOf(count*Integer.valueOf(unit.substring(0,unit.length()-1)))+"元");
-
+                if(amount>1)
+                amount-=1;
+                changeNumber();
             }
         });
         btnAdd.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                count+=1;
-                tvNum.setText(count+"");
-                tvPrice.setText(String.valueOf(count*Integer.valueOf(unit.substring(0,unit.length()-1)))+"元");
+                amount+=1;
+                changeNumber();
             }
         });
+
         btnPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("test","種類="+kind+",type="+type+",size="+size+",sugar="+sugar+",數量="+count);
-
-                MealList.money = count*Integer.valueOf(unit.substring(0,unit.length()-1));
-                MealList.num = count;
+                int[] price = new int[name.length];
+                for (int i=0;i<name.length;i++){
+                    price[i] = mDbHelper.getCoffee(name[i]);
+                    Log.d("TAG55",price[i]+"i"+i);
+                }
+                write();
                 finish();
-                count=0;
+                amount=1;
             }
         });
+    }
+    
+    void write(){
+        Calendar c =Calendar.getInstance();
+        String onTime = c.getTime().toString();
+        if (isUpdate){
+            mDbHelper.update(rowId,type,size,sugar,amount+"",unit,sum+"");
+        }else {
+            mDbHelper.create(name[kind],type,size,sugar,amount+"",unit,sum+"",onTime,kind+"");
+            Toast.makeText(CoffeeMenu.this,"新增成功",Toast.LENGTH_SHORT).show();
+        }
     }
 
 }
